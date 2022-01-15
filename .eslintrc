@@ -21,6 +21,7 @@
     "react/no-danger": [0],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
+    "react/function-component-definition": [0],
     "arrow-body-style": [0],
     "prefer-arrow-callback": [0]
   }
