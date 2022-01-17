@@ -5,13 +5,39 @@ import { apiGet } from '../misc/config';
 const Show = () => {
   const { id } = useParams();
   const [show, setShow] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
-    apiGet(`/shows/${id}?embed[]=seasons&embed[]=cast`).then(res => {
-      setShow(res);
-    });
+    let isMounted = true;
+    apiGet(`/shows/${id}?embed[]=seasons&embed[]=cast`)
+      .then(res => {
+        if (isMounted) {
+          setShow(res);
+          setIsLoading(false);
+        }
+      })
+      .catch(err => {
+        if (isMounted) {
+          setError(err.message);
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [id]);
   // eslint-disable-next-line no-console
   console.log(show);
+
+  if (isLoading) {
+    return <div>Loading content</div>;
+  }
+
+  if (error) {
+    return <div>Error Occured: {error}</div>;
+  }
   return (
     <div>
       <div>This is the Show</div>
